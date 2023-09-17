@@ -1,0 +1,7 @@
+{
+    "type": "object",
+    "action": "create",
+    "source": "template",
+    "filename": "common/config-map-ingress.yml",
+    "replaceToken": "true"
+}

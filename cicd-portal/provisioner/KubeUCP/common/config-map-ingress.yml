@@ -1,0 +1,10 @@
+apiVersion: v1
+data: 
+  server-tokens: "false",
+  worker-processes: "2",
+  proxy-add-original-url-header: "true"
+kind: ConfigMap
+metadata:
+  label: 
+    app: ingress-nginx
+  name: nginx-configuration

@@ -1,0 +1,147 @@
+{
+    "wait": {
+        "event": {
+            "deployments_deleted": {
+                "occurence": "1"
+            }
+        } 
+    },
+    "name": "deploy-node",
+    "type": "namespace",
+    "items": [
+        {
+            "template": "common/load-env-type-properties.json",
+            "provisioner": "propertyLoader",
+            "restart": "always",
+            "name": "load-env-type-properties",
+            "type": "properties"
+        },
+        {
+            "name": "load-env-name-properties",
+            "type": "properties",
+            "restart": "always",
+            "provisioner": "propertyLoader",
+            "template": "common/load-env-name-properties.json"
+        },
+        {
+            "name": "kube-node",
+            "type": "namespace",
+            "items": [
+                {
+                    "name": "kubernetes-analytical-structure-service",
+                    "type": "namespace",
+                    "items": [
+                        {
+                            "template": "services/load-analytical-structure-properties.json",
+                            "provisioner": "propertyLoader",
+                            "restart": "always",
+                            "name": "load-analytical-structure-properties",
+                            "type": "properties"
+                        },
+                        {
+                            "template": "common/config-map-bootstrap-delete.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "config-map-bootstrap-delete",
+                            "type": "deletion"
+                        },
+                        {
+                            "template": "common/config-map-bootstrap-create.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "config-map-bootstrap-create",
+                            "type": "configuration"
+                        },
+                        {
+                            "template": "common/load-service-secrets.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "load-service-secrets",
+                            "type": "credential"
+                        },
+                        {
+                            "template": "services/analytical-structure/secrets-for-services-delete.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "delete-secrets-for-service",
+                            "type": "deletion"
+                        },
+                        {
+                            "template": "services/analytical-structure/secrets-for-services-create.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "create-secrets-for-service",
+                            "type": "configuration"
+                        },
+                        {
+                            "template": "services/create-kube-descriptors.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "analytical-structure",
+                            "type": "application",
+                            "version": "1.1.17"
+                        }
+                    ]
+                },
+               
+                {
+                    "name": "kubernetes-cics-service",
+                    "type": "namespace",
+                    "items": [
+                        {
+                            "template": "services/load-cics-properties.json",
+                            "provisioner": "propertyLoader",
+                            "restart": "always",
+                            "name": "load-cics-properties",
+                            "type": "properties"
+                        },
+                        {
+                            "template": "common/config-map-bootstrap-delete.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "config-map-bootstrap-delete",
+                            "type": "deletion"
+                        },
+                        {
+                            "template": "common/config-map-bootstrap-create.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "config-map-bootstrap-create",
+                            "type": "configuration"
+                        },
+                        {
+                            "template": "common/load-service-secrets.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "load-service-secrets",
+                            "type": "credential"
+                        },
+                        {
+                            "template": "services/cics/secrets-for-services-delete.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "delete-secrets-for-service",
+                            "type": "deletion"
+                        },
+                        {
+                            "template": "services/cics/secrets-for-services-create.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "create-secrets-for-service",
+                            "type": "configuration"
+                        },
+                        {
+                            "template": "services/create-kube-descriptors.json",
+                            "provisioner": "KubeUCP",
+                            "restart": "always",
+                            "name": "cics",
+                            "type": "application",
+                            "version": "1.1.17"
+                        }
+                    ]
+                }
+            ]
+
+        }
+    ]
+}

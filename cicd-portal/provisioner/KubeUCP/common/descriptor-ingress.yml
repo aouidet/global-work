@@ -1,0 +1,40 @@
+apiVersion: extension/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: ns-${KUBE_DTR_ORGANIZATION}
+    kubernetes.io/ingress.allow-http: "${ALLOW_HTTP}"
+    nginx.ingress.kubernetes.io/ssl-redirect: "${SSL_REDIRECT}"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "${FORCE_SSL_REDIRECT}"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "false"
+    nginx.ingress.kubernetes.io/secure-backends: "false"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_clear_headers "Server";
+
+   nginx.ingress.kubernetes.io/proxy-body-size: "0"
+   nginx.ingress.kubernetes.io/proxy-read-timeout: "360000"
+   nginx.ingress.kubernetes.io/rewrite-target: "${INGRESS_REWRITE_TARGET}"
+   nginx.ingress.kubernetes.io/proxt-send-timeout: "40000"
+   nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  
+  name: "${project}-${case:lower:envType}-${case:lower:envName}-petra-sni"
+
+spec;
+  rules:
+    - host: ${trim:end:FQDN:.fr.word.socgen}.${INGRESS_DNS_SUFFIX}
+      http: 
+        - path: /${ANALYTICAL_STRUCTURE_CONTEXT_PATH}/?(.*)
+          backend: 
+            serviceName: "${project}-${case:lower:envType}-${case:lower:envName}-${ANALYCAL_STRUCTURE_SERVICE_NAME}-service"
+            servicePort: 8080
+        - path: /${CICS_CONTEXT_PATH}/?(.*)
+          backend: 
+            serviceName: "${project}-${case:lower:envType}-${case:lower:envName}-${CICS_SERVICE_NAME}-service"
+            servicePort: 8080
+  tls: 
+    - secretName: "${project}-${case:lower:envType}-${case:lower:envName}-${DOMAIN_NAME}-certificate"
+      hosts:
+        - ${trim:end:FQDN:.fr.word.socgen}.${INGRESS_DNS_SUFFIX}
+        - ${FQDN}
+status:
+loadBalancer: {}

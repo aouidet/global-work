@@ -1,0 +1,63 @@
+Ex-1
+ - create PV called log-volume, it should make use of a storage class name manual, 
+should use RWX as the access mode and have a size of 1Gi
+the volume should use the hostPath  /opt/volume/nginx
+
+ - Next, create PVC called log-claim requesting a minimum of 200Mi of storage 
+  should bind to log-volume
+  Mount this in a pod called logger at the location /var/www/nginx, this pod should use the image nginx:alpine
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: log-volume
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes: 
+    - ReadWriteMany
+  hostPath:
+    path: /opt/volume/nginx
+
+# k create -f fiel.yaml
+# k get pv
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: log-claim
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Mi
+  storageClassName: manual
+
+  # k get pvc
+
+  ---
+
+  Init Pod descriptor
+# k run logger --image=nginx:alpine --dry-run=client -o yaml > pod-des.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: logger
+spec:
+  volumes:
+    name: log
+    persistentVolumeClaim:
+      className: log-claim
+  container:
+  - image: nginx:alpine
+    name: logger
+    resources: {}
+    volumeMounts:
+      - name: log
+        mountPath: /var/www/nginx
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always

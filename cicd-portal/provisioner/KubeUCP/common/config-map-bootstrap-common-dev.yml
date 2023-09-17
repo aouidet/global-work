@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: ${project}-${case:lower:envType}-${case:lower:envName}-${project}
+  environment: ${case:lower:envType}-${case:lower:envName}
+  envType: "${envType}"
+  envName: " ${envName}"
+  trigram: "${trigram}"
+  iappli: "${iappli}"
+  project: "${project}"
+
+data:
+  # Spring
+  PROFILE : "${case:lower:envType}"
+  SPRING_PROFILES_ACTIVE: "${case:lower:envType}"
+  springdoc.cache.disabled: "true"
+
+  # logs
+  LOGS_DIR: "/tmp"
+
+  # Default JVM options
+  INITIAL_HEAP_SIZE: "512"
+  MAX_HEAP_SIZE: "1024M"
+  JVM_OPTS: "-XX:InialRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
+
+  # Use for monitor project in spring boot admin
+  SPRING_BOOT_LABEL: ${project}-${case:lower:envType}-${case:lower:envName}-spring-boot
+
+  # Use for get secret from my vault
+  PETRA_MY_VAULT_URI: "https://vault.vloud.socgen/v1"
+  PETRA_MY_VAULT_NAMESPACE: myVault/PTA_PRD_API_VAULT
+  PETRA_MY_VAULT_ROLE: "read-${project}-${case:lower:envType}-kv-app_role" 
+
+  # External source
+  SG_CONNECT_URL: 
+  SG_MONITORING_URL:
+  SG_MONITORING_REALM:
+  SG_MONITORING_ELASTIC_ENDPOINT: 
+
+  # Mail notification
+
+  MAIL_RECIPIENTS: 
+  MAIL_HOST: 
+
+  # HTTP
+  CORS_ALLOWED_HEADERS:  "Origin, Content-Type, Accept, Authorized, Access-Control-Request_Headers, Access-Control-Request-Method, current-user-role, X-Correletion-Id, Tenant-Id, Pragma, Cache-Control, Expires"
+
+  # APM
+  APM_URL:
+  APM_PORT:
+  APM_VERSION:
+  APM_JAVA_PACKAGE:
+
+  # Swagger
+  SWAGGER: "true"
+
+  

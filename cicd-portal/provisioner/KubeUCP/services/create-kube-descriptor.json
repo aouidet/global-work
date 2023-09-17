@@ -1,0 +1,7 @@
+{
+    "type": "object",
+    "action": "create",
+    "source": "template",
+    "filename": "services.deploy.yml",
+    "replaceToken": "true"
+}

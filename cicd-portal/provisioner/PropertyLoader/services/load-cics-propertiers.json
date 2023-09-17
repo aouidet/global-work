@@ -1,0 +1,5 @@
+{
+    "source": "template",
+    "filename:": "services/cicse.properties",
+    "replaceToken": "permissive"
+}

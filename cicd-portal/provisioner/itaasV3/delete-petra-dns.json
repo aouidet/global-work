@@ -1,0 +1,8 @@
+{
+    "topology": [
+        {
+            "verb": "DELETE",
+            "url": "https://itaas-prod.fr.world.socgen:10443/v3/${iappli}/domains"
+        }
+    ]
+}

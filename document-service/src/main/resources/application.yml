@@ -1,0 +1,83 @@
+server:
+  port: 8081
+
+info:
+  build:
+    artifact: @project.artifactId@
+    name: @project.name@
+    description:
+    version: @project.version@
+
+spring:
+  application:
+    name: @project.name@
+#  autoconfigure:
+#    exclude: org.springframework.boot.autotonfigure.elasticsearch.jest.JestAutoconfiguration
+  main:
+    allow-bean-definition-overriding: false
+
+  servlet:
+    multipart:
+      max-file-size: ${MULTIPART_MAX_FILE_SIZE}
+      max-request-size:  ${MULTIPART_MAX_REQUEST_SIZE}
+
+  zipkin:
+    enable: true
+    encoder: json_v1
+    base-url: ${SG_MONITORING_URL}
+    service:
+      name:
+    sleuth:
+      sampler:
+        rate: 50
+
+# Logging
+
+logging:
+  file:
+    name: @project.artifactId@@project.version@ # add as {LOG_FILE} varriable to environment
+ #   path: ${LOG_DIR}/@project.artifactId@
+  config: classpath:edt-logback.xml
+  level:
+    com.sgcib: DEBUG
+    org:
+      springframework:
+        web:
+          RestTemplate: DEBUG
+
+management:
+  endpoint:
+    web:
+      exposure:
+        inculde: health,info,loggers,metrics
+      base-path: /admin
+    endpoint:
+      health:
+        show-details: ALWAYS
+    health:
+      rabbit:
+        enabled: false
+      vault:
+        enabled: false
+      consult:
+        enabled: false
+
+#=============================
+# services specific properties
+#=============================
+
+# SG-Connect
+sg:
+  oauth1:
+    root-uri: ${SG-CONNECT-URL}/sgconnect/oauth2
+    security:
+      oauth2:
+        scopes: api-document-management.v1,api-document-management.read,api-document-management.write
+        unsuported-paths:
+          - /admin/*
+          - /health
+        swagger-enabled: ${SWAGGER_ENABLED}
+
+# === oauth2 configuration for openapi document - used also by swagger ui
+  openapi:
+

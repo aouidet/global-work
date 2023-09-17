@@ -1,0 +1,6 @@
+{
+    "source": "template",
+    "filaname": "commons/${case:upper:envType}.properties",
+    "replaceToken": "permissive"
+
+}

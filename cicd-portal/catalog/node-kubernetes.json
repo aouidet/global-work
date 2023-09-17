@@ -1,0 +1,117 @@
+{
+    "name": "kubernetes-node",
+    "type": "namespace",
+    "sendEventAfter": "kubernetes_ready",
+    "items": [
+        {
+            "name": "load-env-type.properties",
+            "type": "properties",
+            "restart": "always",
+            "provisioner": "propertyLoader",
+            "template": "commons/load-env-type-properties.json"
+        },
+        {
+            "name": "load-env-name.properties",
+            "type": "properties",
+            "restart": "always",
+            "provisioner": "propertyLoader",
+            "template": "commons/load-env-name-properties.json"
+        },
+        {
+            "name": "kubernetes-commons",
+            "type": "namespace",
+            "items": [
+                {
+                    "name": "kubernetes-commons-secrets",
+                    "type": "namespace",
+                    "items": [
+                        {
+                            "name": "sgmonitoring-secrets",
+                            "type": "namespace",
+                            "items" : [
+                                {
+                                    "name": "delete-secrets-for-sgmonitoring",
+                                    "type": "deletion",
+                                    "provisioner": "KubeUCP",
+                                    "template": "common/secrets-for-sgmonitoring-deletion.json",
+                                    "restart": "always"
+
+                               },
+                               {
+                                "name": "create-secrets-for-sgmonitoring",
+                                "type": "configuration",
+                                "provisioner": "KubeUCP",
+                                "template": "common/secrets-for-sgmonitoring-create.json",
+                                "restart": "always"
+                               }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "create-certificate-for-petra-domain",
+                    "type": "namespace",
+                    "items": [
+                        {
+                            "name": "create-keystore",
+                            "type": "credential",
+                            "provisioner": "keystore",
+                            "template": "common/create-keystore.json"
+                        },
+                        {
+                            "name": "load-keystore",
+                            "type": "credential",
+                            "provisioner": "SecretLoader",
+                            "template": "common/load-keystore.json"
+                        },
+                        {
+                            "name": "create-secret-certificate",
+                            "type": "configuration",
+                            "provisioner": "KubeUCP",
+                            "template": "common/secret-certificate-create.json"
+                        },
+                        {
+                            "name": "create-petra-dns",
+                            "type": "configuration",
+                            "provisioner": "kItaasV3eystore",
+                            "template": "common/create-petra-dns.json"
+                        }
+                    ]
+                },
+                {
+                    "name": "create-common-configuration",
+                    "type": "namespace",
+                    "items": [
+                        {
+                            "name": "config-map-bootstrap-common-delete",
+                            "type": "configuration",
+                            "provisioner": "KubeUCP",
+                            "template": "common/config-map-bootstrap-common-delete.json",
+                            "restart": "always"
+                        },
+                        {
+                            "name": "config-map-bootstrap-common-create",
+                            "type": "configuration",
+                            "provisioner": "KubeUCP",
+                            "template": "common/config-map-bootstrap-common-create.json",
+                            "restart": "always"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "create-ingress-descriptor",
+            "type": "configuration",
+            "provisioner": "KubeUCP",
+            "template": "common/descriptor-ingress-create.json",
+            "restart": "always"
+        },
+        {
+            "name": "create-ingress-config-map",
+            "type": "configuration",
+            "provisioner": "KubeUCP",
+            "template": "common/config-map-ingress-create.json"
+        }
+    ]
+}

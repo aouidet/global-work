@@ -1,0 +1,58 @@
+EX2
+
+we have deployed a new pod called secure-pod and a service called secure-service
+Incoming and outgong connections to this pod are not working
+
+make shure that incoming connection from pod webapp-color are seccessuful.
+
+=======  > Networing
+
+k get pods : show pods 
+k get svc : show services
+
+
+tester l'acces depuis webapp-color
+# k exec -it webapp-color -- sh
+# nc -v -z -w 2 secure-service:80 ==> not working timeout 
+
+# k get netpo : show networking pool
+# k describe netpol
+# k get pod --show-labels
+
+ # k get netpol default-deny -o yaml > netpol.yaml
+
+ ---
+apiVersion: networing.k8s.io/v1
+kind: NetworingPolicy
+metadata:
+  name: network-policy
+  namespace: default
+spec:
+  posSelector: 
+    matchLabels:
+      run: secure-pod
+  policyTypes:
+  - Ingress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            name: webapp-color
+      ports:
+        - protocol: TCP
+          port: 80
+
+# kubectl exec -it webapp-color -- sh
+# nc -v -z -w 2 secure-service:80 
+
+
+
+
+kubectl exec -it webapp-color -- sh: Cette commande exécute une session interactive (option -it) dans le conteneur nommé webapp-color. L'argument -- indique à kubectl que les options en ligne de commande suivantes sont destinées à la commande exécutée dans le conteneur. Dans ce cas, la commande exécutée dans le conteneur est sh, qui ouvre un shell interactif à l'intérieur du conteneur. Cela permet à l'utilisateur d'exécuter des commandes directement dans le contexte du conteneur, ce qui peut être utile pour le débogage ou l'administration.
+
+nc -v -z -w 2 secure-service:80: Cette commande utilise nc (netcat) pour tester la connectivité réseau avec le service secure-service sur le port 80. Les options utilisées sont les suivantes :
+
+-v: Mode verbeux, affiche les détails de la connexion.
+-z: Mode scan, ne transfère aucune donnée.
+-w 2: Définit un délai d'attente de 2 secondes pour la tentative de connexion.
+En utilisant nc de cette manière, la commande tente d'établir une connexion au service secure-service sur le port 80. Si la connexion réussit, aucun transfert de données n'est effectué (mode scan), et le résultat sera affiché dans la sortie. Cette commande est souvent utilisée pour effectuer des vérifications de connectivité et de disponibilité des services réseau.

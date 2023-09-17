@@ -1,0 +1,7 @@
+{
+    "type": "object",
+    "action": "delete",
+    "source": "template",
+    "filename": "services.deploy.yml",
+    "replaceToken": "permissive"
+}

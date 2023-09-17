@@ -1,0 +1,17 @@
+{
+    "node": [
+        {
+            "name": "kuberetes",
+            "description": "node-kubernetes.json",
+            "deleteDescriptor": "node-kubernetes-deletion.json",
+            "quantity": 1
+        },
+        {
+            "name": "deploy",
+            "description": "node-deploy.json",
+            "deleteDescriptor": "node-deploy-deletion.json",
+            "quantity": 1
+        }
+    ],
+    "retryCounter": 1
+}

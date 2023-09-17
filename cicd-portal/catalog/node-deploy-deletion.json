@@ -1,0 +1,82 @@
+{
+    "name": "main",
+    "type": "namespace",
+    "sendEventAfeter": "deploments_deleted",
+    "items": [
+        {
+            "name": "load-env-type-properties",
+            "type": "properties",
+            "provisioner": "PropertyLoader",
+            "template": "common/load-env-type-properties.json",
+            "restart": "always"
+        },
+        {
+            "name": "load-env-name-properties",
+            "type": "properties",
+            "provisioner": "PropertyLoader",
+            "template": "common/load-env-name-properties.json",
+            "restart": "always"
+        },
+        {
+            "name": "kube-deploy",
+            "type": "namespace",
+            "items": [
+                {
+                    "name": "kubernetes-analytical-structure-service",
+                    "type": "namespace",
+                    "items": [
+                        {
+                    "name": "load-analytical-structure-properties",
+                    "type": "properties",
+                    "provisioner": "propertyLoader",
+                    "template": "services/load-analytical-structure-properties.json",
+                    "restart": "always"
+                },
+                {
+                    "name": "delete-kube-descriptor",
+                    "type": "application",
+                    "provisioner": "KubeUCP",
+                    "template": "services/delete-kube-descriptor",
+                    "restart": "always"
+                },
+                {
+                    "name": "secret-for-service-delete",
+                    "type": "properties",
+                    "provisioner": "propertyLoader",
+                    "template": "services/${SERVICE_NAME}/secret-for-service-delete.json",
+                    "restart": "always"
+                }
+                    ]
+                },
+               
+                {
+                    "name": "kubernetes-cics-service",
+                    "type": "namespace",
+                    "items": [
+                        {
+                    "name": "load-cics-properties",
+                    "type": "properties",
+                    "provisioner": "propertyLoader",
+                    "template": "services/load-cics-properties.json",
+                    "restart": "always"
+                },
+                {
+                    "name": "delete-kube-descriptor",
+                    "type": "application",
+                    "provisioner": "KubeUCP",
+                    "template": "services/delete-kube-descriptor",
+                    "restart": "always"
+                },
+                {
+                    "name": "secret-for-service-delete",
+                    "type": "properties",
+                    "provisioner": "propertyLoader",
+                    "template": "services/${SERVICE_NAME}/secret-for-service-delete.json",
+                    "restart": "always"
+                }
+                    ]
+                }
+            ]
+        }
+    ]
+}

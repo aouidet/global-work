@@ -1,0 +1,46 @@
+Create a po called time-check in the dvL1987 namespace
+this pod should run a container called time-check  that uses the busybox image.
+
+Create a configMap called time-config with the data TIME_FREQ=10 in the same namsepace
+
+The time-check container should run the command while true; do date; sleep $Time_FREQ; done
+and write the result to the location /opt/time/timecheck.log
+
+the path /opt/time on the pod should mount a volume that lasts the lifetime pf this pod.
+
+---
+k create ns dvL1987
+k create cm time-copnfig -n dvL1987 --from-literal=TIME_FRES=1°
+k get cm -n dvL1987
+
+
+k run time-ceck --image=busybux --dry-run=client -o yaml > des.yaml
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: time-check
+  name: time-check
+  namespace: dvl1987
+spec:
+  volumes:
+  - name: log-volume
+    emptyDir: {}
+  containers:
+  - image: busybox
+    name: time-check
+    env:
+    - name: TIME_FREQ
+      valueFrom:
+            configMapKeyRef:
+              name: time-config
+              key: TIME_FREQ
+    volumeMounts:
+    - mountPath: /opt/time
+      name: log-volume
+    command:
+    - "/bin/sh"
+    - "-c"
+    - "while true; do date; sleep $TIME_FREQ;done > /opt/time/time-check.log"

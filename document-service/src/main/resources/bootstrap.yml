@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    vault:
+      uri: ${MY_VAULT_URI}
+      scheme: https
+      namespace: ${MY_NAME_SPACE}
+      connection-timeout: 5000
+      read-timeout: 15000
+      config:
+        lifecycle:
+          enabled: false
+      authentication: approle
+      app-role:
+        role: ${MY_VAULT_ROLE}
+        role-id:  ${MY_VAULT_ROLE_ID}
+        secret-id:  ${MY_VAULT_ROLE_SECRET_ID}
+        app-role-path: approle
+     kv:
+       backend: kv
+       enabled: true
+     secret-paths:  ${MY_VAULT_SECRET_PATHS}

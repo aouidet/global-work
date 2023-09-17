@@ -1,0 +1,39 @@
+
+Create a new deployment called nginx-deploy, with one single container called nginx, image nginx:1.16 and 4 replicas.
+The deployment should use RollingUpdate strategy with maxSurge=1, and maxUnavailable=2.
+
+Next upgrade the deployment to version 1.17.
+
+Finally, once all pods are updated, undo the update and go back to the previous version.
+
+
+# kubectl create deployment nginx-deploy --image=nginx:1.16 --replicas=4 --dry-run=client -oyaml > nginx-deploy.yaml
+
+___
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-deploy
+  name: nginx-deploy
+  namespace: default
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nginx-deploy
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 2
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: nginx-deploy
+    spec:
+      containers:
+      - image: nginx:1.16
+        imagePullPolicy: IfNotPresent
+        name: nginx

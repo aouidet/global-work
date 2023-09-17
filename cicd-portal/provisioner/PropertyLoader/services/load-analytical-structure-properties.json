@@ -1,0 +1,5 @@
+{
+    "source": "template",
+    "filename:": "services/analytical-structure.properties",
+    "replaceToken": "permissive"
+}

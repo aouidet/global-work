@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "${project}-${case:lower:envType}-${case:lower:envName}-${SERVICE_NAME}-bootstrap-configmap"
+  labels: 
+    app: "${project}-${case:lower:envType}-${case:lower:envName}-${project}"
+    service: "${project}-${case:lower:envType}-${case:lower:envName}-${SERVICE_NAME}"
+    environment: "${case:lower:envType}-${case:lower:envName}"
+    envName: "${envName}"
+    trigram: "${trigram}"
+    iappli: "${iappli}"
+    project: "${project}"
+    version: "${version}"
+data:
+  spring.profiles.active: "${case:lower:envType}"
+  SERVER_PORT: "8080"
+
+  PETRA_MY_VAULT_SECRET_PATH: "petra/${case:lower:envType}/services/${SERVICE_NAME},petra/${case:lower:envType}/shared/sg-monitoring"

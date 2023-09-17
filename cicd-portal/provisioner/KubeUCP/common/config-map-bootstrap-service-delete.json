@@ -1,0 +1,7 @@
+{
+    "type": "object",
+    "action": "create",
+    "source": "template",
+    "filename": "service/${SERVICE_NAME}/config-map-bootstrap-${SERVICE_NAME}-${calse:lower:envType}.yml",
+    "replaceToken": "permissive"
+}

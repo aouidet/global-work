@@ -1,0 +1,5 @@
+{
+    "source": "vault",
+    "vaultSearchType": "vaultSecretPath",
+    "vaultSecretPath": "petra/${case:lower:envType}/shared/sg-monitoring"
+}

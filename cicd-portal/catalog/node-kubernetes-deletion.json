@@ -1,0 +1,124 @@
+{
+    "name": "delete",
+    "type": "namespace",
+    "wait": {
+        "event": {
+            "deployments_deleted": {
+                "occurence": "1"
+            }
+        } 
+    } ,
+    "items": 
+   [
+    {
+        "name": "load-env-type-properties",
+        "type": "properties",
+        "restart": "always",
+        "provisioner": "propertyLoader",
+        "template": "common/load-env-type-properties.json"
+    },
+    {
+        "name": "load-env-name-properties",
+        "type": "properties",
+        "restart": "always",
+        "provisioner": "propertyLoader",
+        "template": "common/load-env-name-properties.json"
+    },
+    {
+        "name": "kubernets-commons",
+        "type": "namespace",
+        "items": [
+            {
+                "name": "kubernetes-commons-secrets",
+                "type": "namespace",
+                "items": [
+                    {
+                        "name": "sgmonitoring-secrets",
+                        "type": "namespace",
+                        "items" : [
+                            {
+                                "name": "delete-secrets-for-sgmonitoring",
+                                "type": "deletion",
+                                "provisioner": "KubeUCP",
+                                "template": "common/delete-serets-for-sgmonitoring.json",
+                                "restart": "always"
+                           }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "create-certificate-for-petra-domain",
+                "type": "namespace",
+                "items": [
+                    {
+                        "name": "delete-keystore",
+                        "type": "credential",
+                        "provisioner": "keystore",
+                        "template": "common/delete-keystore.json"
+                    },
+                    {
+                        "name": "delete-secret-certificate",
+                        "type": "configuration",
+                        "provisioner": "KubeUCP",
+                        "template": "common/delete-secret-certificate.json"
+                    },
+                    {
+                        "name": "delete-petra-dns",
+                        "type": "configuration",
+                        "provisioner": "kItaasV3eystore",
+                        "template": "common/delete-petra-dns.json"
+                    }
+                ]
+            },
+            {
+                "name": "delete-common-configuration",
+                "type": "namespace",
+                "items": [
+                    {
+                        "name": "config-map-bootstrap-common-delete",
+                        "type": "configuration",
+                        "provisioner": "KubeUCP",
+                        "template": "common/config-map-bootstrap-common-delete.json",
+                        "restart": "always"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "kubernetes-petra-cics-service",
+        "type": "namespace",
+        "items": [
+            {
+                "name": "load-petra-cics-properties",
+                "type": "properties",
+                "provisioner": "PropertyLoader",
+                "template": "common/load-petra-cics-properties.json",
+                "restart": "always"
+            },
+            {
+                "name": "delete-config-map-for-petra-cics",
+                "type": "deletion",
+                "provisioner": "KubeUCP",
+                "template": "services/petra-cics/deletion-config-map-for-peytra-cics.json",
+                "restart": "always"
+            }
+        ]
+    },
+    {
+        "name": "delete-ingress-descriptor",
+        "type": "configuration",
+        "provisioner": "KubeUCP",
+        "template": "common/descriptor-ingress-delete.json",
+        "restart": "always"
+    },
+    {
+        "name": "delete-ingress-config-map",
+        "type": "configuration",
+        "provisioner": "KubeUCP",
+        "template": "common/config-map-ingress-delete.json",
+        "restart": "always"
+    }
+   ]
+}
